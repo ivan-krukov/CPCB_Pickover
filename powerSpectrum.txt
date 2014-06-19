@@ -1,0 +1,26 @@
+ALGORITHM: How to create a power spectrum
+---------------------------------------------------------------------------
+VARIABLES:	TimeInterval	-	the time between data points (seconds)
+			NPTS			-	the number of original data points.
+INPUT:	Input(t)	-	waveform as a function of time	
+OUTPUT:	Output(f)	-	amount of energy at each frequency (Hz).
+NOTES:	The power spectrum is useful for detecting patterns in complicated
+waveforms. Simply plot Power(f) vs. f. 
+Peaks should occur at prominent frequencies.
+Real(f) and Imag(f) are simply real-valued arrays which hold intermediate
+values needed in the computation. See referenced books for windowing
+techniques used to improve spectrum.
+---------------------------------------------------------------------------
+twopi = 6.283; TimeInterval = 0.0001 (* sec. *)
+MAXF = 1/(2*TimeInterval);	(* set the highest frequency *)
+
+DO f = 1 to MAXF;			(* x-axis range is 1 to MAXF (Hz) *)
+	real(f), image(f) = 0;	(* initialize for summation *)
+	arg=twopi*f*TimeInterval;
+	DO i = 1 to NPTS;		(* Loop over points in input *)
+		real(f) = real(f) + input(i)*cos(arg*i);
+		imag(f) = imag(f) + input(i)*sin(arg*i);
+	END;
+	(* compute power spectrum - amount of energy at each f *)
+	Power(f)  = real(f)**2 + imag(f)**2;
+END;
