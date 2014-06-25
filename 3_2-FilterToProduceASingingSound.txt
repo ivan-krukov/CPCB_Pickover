@@ -1,0 +1,28 @@
+ALGORITHM: A FILTER TO PRODUCE A SINGING 
+WAVEFORM "M" (as in "mom")
+----------------------------------------------------------
+INPUT:		freq - formant frequency of a singing sound
+OUTPUT:		a waveform (amplitude vs. time)
+VARIABLES:	freq, bw 
+NOTES: If the waveform is converted to sound, it should sound 
+like a steady state nasal sound. "Output(i)" must be initialized 
+with a simple driving function such as a sine wave with f=120 Hz
+to simulate puffs of air through the vocal cords.
+----------------------------------------------------------
+(*	center frequency of resonance (Hertz)		*)
+freq = 260;		(* center frequency				*)
+bw   = 100;		(* bandwidth of resonance		*)
+npts = 1000;	(* number of waveform points	*)
+fs   = 10000	(* sample at 10,000 samples per sec		*)
+t2pi=6.2831853/fs;
+if gender = 'FEMALE' then freq = freq * 1.15;
+y2n=0;y1n=0;
+(*------ calculate filter coefficients -----------------*)
+bb = exp(-bw*t2pi);
+aa = 2.0 * exp(-(bw/2)*t2pi) * cos(freq*t2pi);
+cc = 1 - aa + bb;
+(*------ apply the filter to npts of data---------------*)
+do i = 1 to npts;
+		output(i) = (cc*output(i))+(aa*y1n)-(bb*y2n);
+		y2n = y1n; y1n = output(i);
+end;
