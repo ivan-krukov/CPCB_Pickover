@@ -1,0 +1,22 @@
+ALGORITHM: COMPUTE RADIUS OF GYRATION (RG) 
+INPUT: х(i), у(i) - coordinates of collection of points 
+OUTPUT: Rg 		    - the radius of gyration 
+VARIABLES: Numpts - number of points used 
+----------------------------------------------------------
+Notes: The radius of gyration is а parameter useful for 
+comparing the spatial extent of collections of points. Some 
+readers may wish to compute the radius of gyration for а group 
+dots on а paper or for something more scientifically interesting.
+----------------------------------------------------------
+sumx = 0; sumy = 0; sumdist=O; 
+(* compute the 'center of gravity'*) 
+DO i = 1 to numpts; 
+sumx=sumx+x(i); sumy=sumy+y(i); 
+END; 
+sumx = sumx/numpts; sumy = sumy/numpts; 
+(* compute distances from center *) 
+DO i = 1 to numpts; 
+	dist=((x(i)-sumx)**2+(у(i) -sumy)**2); 
+	sumdist=sumdist+dist; 
+END; 
+Rg=sqrt(sumdist/numpts); (* compute radius of gyration *)
